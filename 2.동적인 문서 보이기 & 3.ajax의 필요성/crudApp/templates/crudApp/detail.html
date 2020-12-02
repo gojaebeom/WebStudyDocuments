@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'styles/public.css' %}">
+    <title>home</title>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/app" class="logo">
+            LOGO
+        </a>
+        <ul class="menu">
+            <li><a href="/app/">홈</a></li>
+            <li><a href="/app/posts">게시물</a></li>
+            <li><a href="/app/create">게시물 작성</a></li>
+        </ul>
+    </nav>
+    <section class="section">
+        <h1>게시물 상세보기</h1>
+
+        <!-- card -->
+          <div class="card">
+                <div class="card-header">
+                    <h4>{{ post.writer }}</h4>
+                    <p>{{ post.title }}</p>
+                </div>
+                <div class="card-body">
+                    <p>{{ post.content }}</p>
+                </div>
+                <form class="comment-form" action="/app/comments/store" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="post_id" value="{{ post.id }}">
+                    <input type="text" name="content" placeholder="코맨트를 남겨주세요">
+                    <button type="submit">작성</button>
+                </form>
+                {% if comment_list %}
+                    {% for comment in comment_list %}
+                        <div class="comment-card">
+                            {{ comment.content }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+          </div>
+
+
+    </section>
+</body>
+</html>

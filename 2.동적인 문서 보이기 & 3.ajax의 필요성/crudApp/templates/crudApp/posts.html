@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'styles/public.css' %}">
+    <title>home</title>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/app" class="logo">
+            LOGO
+        </a>
+        <ul class="menu">
+            <li><a href="/app/">홈</a></li>
+            <li><a href="/app/posts">게시물</a></li>
+            <li><a href="/app/create">게시물 작성</a></li>
+        </ul>
+    </nav>
+    <section class="section">
+        <h1>게시물 리스트</h1>
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>작성자</th>
+                    <th>제목</th>
+                    <th>링크</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in post_list %}
+                    <tr>
+                        <td>{{ post.id }}</td>
+                        <td>{{ post.writer }}</td>
+                        <td>{{ post.title }}</td>
+                        <td>
+                            <a href="/app/posts/{{ post.id }}" class="table-link">
+                                상세보기
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+</body>
+</html>

@@ -1,0 +1,8 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Datasource local storage ignored files
+/../../../../../../../../:\Users\gojaebeom\#workspace\dev\웹 사이트의 발전과 그에 따른 기술 예제\4.SPA- 자바스크립트만으로 구현해보기\.idea/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/

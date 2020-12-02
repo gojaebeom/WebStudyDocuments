@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'styles/public.css' %}">
+    <title>home</title>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/app" class="logo">
+            LOGO
+        </a>
+        <ul class="menu">
+            <li><a href="/app/">홈</a></li>
+            <li><a href="/app/posts">게시물</a></li>
+            <li><a href="/app/create">게시물 작성</a></li>
+        </ul>
+    </nav>
+    <section class="section">
+        <h1>게시물 생성</h1>
+        <form action="/hello/store" method="POST" class="form">
+            {% csrf_token %}
+            <label>아이디</label>
+            <input type="text" name="username">
+
+            <label>비밀번호</label>
+            <input type="password" name="password">
+
+            <button type="submit">생성</button>
+        </form>
+    </section>
+
+    <script>
+    </script>
+</body>
+</html>

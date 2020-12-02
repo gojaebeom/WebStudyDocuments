@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'styles/public.css' %}">
+    <title>home</title>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/app" class="logo">
+            LOGO
+        </a>
+        <ul class="menu">
+            <li><a href="/app/">홈</a></li>
+            <li><a href="/app/posts">게시물</a></li>
+            <li><a href="/app/create">게시물 작성</a></li>
+        </ul>
+    </nav>
+    <section class="section">
+        <h1>게시물 상세보기(ajax 통신용)</h1>
+
+        <!-- card -->
+          <div class="card">
+                <div class="card-header">
+                    <h4>{{ post.writer }}</h4>
+                    <p>{{ post.title }}</p>
+                </div>
+                <div class="card-body">
+                    <p>{{ post.content }}</p>
+                </div>
+                <form id="comment-form" class="comment-form" action="/app/comments/store" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="post_id" value="{{ post.id }}">
+                    <input type="text" name="content" placeholder="코맨트를 남겨주세요">
+                    <button id="comment-button" type="submit">작성</button>
+                </form>
+                <div class="comment-card-list">
+
+                </div>
+          </div>
+    </section>
+    <script>
+        //폼의 input 데이터들을 가져오기 위해 상수로 사용
+        const commentForm = document.getElementById('comment-form');
+        //버튼 dom을 사용하기 편하게 상수에 담음
+        const commentButton = document.getElementById('comment-button');
+
+        const commentCardList = document.querySelector('.comment-card-list');
+
+        //버튼을 클릭했을 때 이벤트 발생
+        //비동기 요청을 처리하기 때문에 비동기 프로세스 환경을 갖추어야함
+        //기본적으로 콜백함수 사용, promise, async-await 방식으로 해결할 수 있으나
+        //이번 예제에서는 가장 사용하기 편하고 최신방식인 async 를 사용
+        //비동기 요청은 런타임 에러가 발생할 수 있어 try-catch문으로 예외처리를 해주어야하지만
+        //예제에서는 사용하지 않음
+        commentButton.addEventListener('click', async (e)=> {
+            e.preventDefault(); //새로고침 방지
+            console.log(commentForm.post_id.value);
+            console.log(commentForm.content.value);
+            let data = {
+                'post_id': commentForm.post_id.value,
+                'content': commentForm.content.value,
+            }
+            let json = await fetch('/app/comments/store-ajax', {
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest', //Necessary to work with request.is_ajax()
+                },
+                body: JSON.stringify(data), // body data type must match
+            }).then(res=>res.json());
+            commentCardList.innerHTML = '';
+            for(let i=0; i < json.length; i++) {
+                commentCardList.innerHTML += `
+                    <div class='comment-card'>
+                        ${json[i].fields.content}
+                    </div>
+                `
+            }
+
+
+        })
+
+    </script>
+</body>
+</html>
